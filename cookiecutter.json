@@ -1,0 +1,16 @@
+{
+  "project_name": "My FastAPI Service",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "project_description": "A FastAPI backend service",
+  "author_name": "Your Name",
+  "author_email": "",
+  "python_version": "3.11",
+  "include_postgres": ["yes", "no"],
+  "postgres_user": "app",
+  "postgres_password": "app",
+  "postgres_database": "{{ cookiecutter.project_slug.replace('-', '_') }}",
+  "api_port": "8000",
+  "include_api_key_auth": ["yes", "no"],
+  "include_example_resource": ["yes", "no"],
+  "initialize_git": ["yes", "no"]
+}

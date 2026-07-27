@@ -1,0 +1,40 @@
+{% if cookiecutter.include_postgres == "yes" %}services:
+  api:
+    build: .
+    ports:
+      - "{{ cookiecutter.api_port }}:8000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - APP_NAME=${APP_NAME}
+{% if cookiecutter.include_api_key_auth == "yes" %}      - API_KEY=${API_KEY}
+{% endif %}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+{% endif %}

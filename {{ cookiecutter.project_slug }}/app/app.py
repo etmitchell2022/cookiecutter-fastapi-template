@@ -3,10 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 {% if cookiecutter.include_api_key_auth == "yes" %}from app.core.auth import require_api_key
 {% endif %}
+from app.core.logging import configure_logging
 from app.core.config import settings
 from app.routes.health_routes import router as health_router
 {% if cookiecutter.include_example_resource == "yes" %}from app.routes.item_routes import router as item_router
 {% endif %}
+
+configure_logging()
 
 app = FastAPI(title=settings.APP_NAME, description="{{ cookiecutter.project_description }}", version="0.1.0")
 
